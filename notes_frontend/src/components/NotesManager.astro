@@ -1,0 +1,55 @@
+---
+import Note from './Note.astro';
+import { notes } from '../data.js';
+---
+
+<div class="container">
+  <aside class="sidebar">
+    <input type="search" class="search-bar" placeholder="Search notes..." />
+    <div class="notes-list">
+      {notes.map(note => <Note note={note} />)}
+    </div>
+  </aside>
+  <main class="main-content">
+    <form class="note-form">
+      <input type="text" placeholder="Note Title" />
+      <textarea placeholder="Write your note here..."></textarea>
+      <div class="note-actions">
+        <button type="submit" class="save">Save</button>
+        <button type="button" class="delete">Delete</button>
+      </div>
+    </form>
+  </main>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const noteItems = document.querySelectorAll('.note-item');
+    const noteForm = document.querySelector('.note-form');
+    const titleInput = noteForm.querySelector('input[type="text"]');
+    const contentTextarea = noteForm.querySelector('textarea');
+    let selectedNoteId = null;
+
+    const notes = [
+      { id: 1, title: 'Meeting Notes', content: 'Discuss project milestones and upcoming deadlines.' },
+      { id: 2, title: 'Shopping List', content: 'Milk, bread, eggs, and cheese.' },
+      { id: 3, title: 'Book Recommendations', content: 'Check out "The Silent Patient" and "Atomic Habits".' },
+    ];
+
+    noteItems.forEach(item => {
+      item.addEventListener('click', () => {
+        selectedNoteId = parseInt(item.dataset.id, 10);
+        const selectedNote = notes.find(note => note.id === selectedNoteId);
+        if (selectedNote) {
+          titleInput.value = selectedNote.title;
+          contentTextarea.value = selectedNote.content;
+        }
+      });
+    });
+
+    noteForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Add logic to save or create a note
+    });
+  });
+</script>
